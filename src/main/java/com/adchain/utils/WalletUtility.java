@@ -4,6 +4,7 @@ import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.spec.ECGenParameterSpec;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -24,6 +25,7 @@ public class WalletUtility {
 	public static List<Key> createKeys() {
 		try {
 			// We use pretty standard parameters for encryption
+			Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("ECDSA", "BC");
 			SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
 			ECGenParameterSpec ecSpec = new ECGenParameterSpec("prime192v1");

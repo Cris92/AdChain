@@ -14,14 +14,6 @@ public class AdBlock {
 		this.transaction = new Transaction();
 	}
 
-	public String getAd() {
-		return this.transaction.getAd();
-	}
-
-	public void setAd(String ad) {
-		this.transaction.setAd(ad);
-	}
-
 	public long getTimeStamp() {
 		return timeStamp;
 	}
@@ -60,12 +52,12 @@ public class AdBlock {
 		System.out.println("Block Mined!!! : " + hash);
 	}
 
-	public long getAmount() {
-		return this.transaction.getAmount();
+	public Transaction getTransaction() {
+		return this.transaction;
 	}
 
-	public void setAmount(long amount) {
-		this.transaction.setAmount(amount);
+	public void setTransaction(Transaction transaction) {
+		this.transaction = transaction;
 	}
 
 }

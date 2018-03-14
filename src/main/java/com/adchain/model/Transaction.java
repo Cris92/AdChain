@@ -58,7 +58,7 @@ public class Transaction implements Serializable {
 		signature = TransactionUtility.createSignature(privateKey, data);
 	}
 
-	// Verifies the data we signed hasnt been tampered with
+	// Check absence of malicious attacks to transaction
 	public boolean verifiySignature() {
 		String data = WalletUtility.getStringFromKey(sender) + WalletUtility.getStringFromKey(receiver) + ad;
 		return TransactionUtility.verifySignature(sender, data, signature);

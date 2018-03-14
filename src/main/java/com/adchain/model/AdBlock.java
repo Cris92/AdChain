@@ -6,16 +6,20 @@ public class AdBlock {
 
 	private String hash;
 	private String previousHash;
-	private String ad;
+	private Transaction transaction;
 	private long timeStamp;
 	private int proofOfWorkValue;
 
+	public AdBlock() {
+		this.transaction = new Transaction();
+	}
+
 	public String getAd() {
-		return ad;
+		return this.transaction.getAd();
 	}
 
 	public void setAd(String ad) {
-		this.ad = ad;
+		this.transaction.setAd(ad);
 	}
 
 	public long getTimeStamp() {
@@ -31,7 +35,8 @@ public class AdBlock {
 	}
 
 	public String calculateHash() {
-		return AdChainUtility.getSHA(previousHash + Long.toString(timeStamp) + ad + proofOfWorkValue);
+		return AdChainUtility.getSHA(previousHash + this.transaction.getAmount() + Long.toString(timeStamp)
+				+ this.transaction.getAd() + proofOfWorkValue);
 	}
 
 	public void setHash(String hash) {
@@ -53,6 +58,14 @@ public class AdBlock {
 			hash = calculateHash();
 		}
 		System.out.println("Block Mined!!! : " + hash);
+	}
+
+	public long getAmount() {
+		return this.transaction.getAmount();
+	}
+
+	public void setAmount(long amount) {
+		this.transaction.setAmount(amount);
 	}
 
 }

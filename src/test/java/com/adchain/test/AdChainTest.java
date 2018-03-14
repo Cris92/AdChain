@@ -3,12 +3,14 @@ package com.adchain.test;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import org.junit.Test;
 
 import com.adchain.model.AdBlock;
 import com.adchain.model.AdChain;
 import com.adchain.model.Transaction;
+import com.adchain.model.TransactionOutput;
 import com.adchain.model.Wallet;
 import com.adchain.test.utils.TestUtils;
 import com.adchain.utils.AdChainUtility;
@@ -16,6 +18,7 @@ import com.adchain.utils.WalletUtility;
 import com.google.gson.GsonBuilder;
 
 public class AdChainTest {
+	public static HashMap<String, TransactionOutput> UTXOs = new HashMap<String, TransactionOutput>();
 
 	@Test
 	public void blockFunctionalityTest() {
@@ -78,4 +81,8 @@ public class AdChainTest {
 
 	}
 
+	@Test
+	public void fullTransactionFunctionalityTest() {
+		// transactions.
+	}
 }

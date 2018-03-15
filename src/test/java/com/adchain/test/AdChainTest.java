@@ -2,6 +2,8 @@ package com.adchain.test;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.Map.Entry;
+
 import org.junit.Test;
 
 import com.adchain.model.AdBlock;
@@ -64,9 +66,15 @@ public class AdChainTest {
 		AdBlock generationBlock = new AdBlock();
 		generationBlock.getTransactions().add(generationCoinsTransaction);
 		chain.add(generationBlock);
-
-		System.out.println(walletA.getWalletBalance());
-		System.out.println(walletB.getWalletBalance());
+		System.out.println("\nAfter Generation\n");
+		System.out.println("Wallet A Balance: "+walletA.getWalletBalance()+"\n");
+		System.out.println("Wallet B Balance: "+walletB.getWalletBalance()+"\n");
+		for (Entry<String, TransactionOutput> o : AdChainUtility.getUTXOs().entrySet()) {
+			
+			System.out.println(o.getKey());
+			System.out.println(o.getValue());
+		}
+		
 
 		Transaction transaction = new Transaction();
 		transaction.setTransactionInputs(walletA.getMyUTXOs());
@@ -82,7 +90,13 @@ public class AdChainTest {
 			firstBlock.getTransactions().add(result);
 			chain.add(firstBlock);
 		}
-		System.out.println(walletA.getWalletBalance());
-		System.out.println(walletB.getWalletBalance());
+		System.out.println("\nAfter Transaction\n");
+		System.out.println("Wallet A Balance: "+walletA.getWalletBalance()+"\n");
+		System.out.println("Wallet B Balance: "+walletB.getWalletBalance()+"\n");
+		for (Entry<String, TransactionOutput> o : AdChainUtility.getUTXOs().entrySet()) {
+			System.out.println(o.getKey());
+			System.out.println(o.getValue());
+		}
+		
 	}
 }

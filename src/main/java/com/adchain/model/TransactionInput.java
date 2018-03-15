@@ -21,4 +21,9 @@ public class TransactionInput {
 		UTXO = uTXO;
 	}
 
+	@Override
+	public String toString() {
+		return "TransactionInput [\ntransactionOutputId=" + transactionOutputId + "\nUTXO=" + UTXO + "\n]";
+	}
+
 }

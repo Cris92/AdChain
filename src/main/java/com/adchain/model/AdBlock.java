@@ -60,4 +60,11 @@ public class AdBlock {
 		this.transaction = transaction;
 	}
 
+	@Override
+	public String toString() {
+		return "AdBlock [hash=" + hash + "\n previousHash=" + previousHash + "\n transaction=" + transaction
+				+ "\n timeStamp=" + timeStamp + "\n proofOfWorkValue=" + proofOfWorkValue + "\n merkleRoot=" + merkleRoot
+				+ "]";
+	}
+
 }

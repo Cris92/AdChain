@@ -47,4 +47,10 @@ public class TransactionOutput {
 	public void setTransactionId(long transactionId) {
 		this.transactionId = transactionId;
 	}
+
+	@Override
+	public String toString() {
+		return "TransactionOutput [\nid=" + id + "\nreceiver=" + receiver + "\namount=" + amount + "\ntransactionId="
+				+ transactionId + "\n]";
+	}
 }

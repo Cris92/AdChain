@@ -2,9 +2,6 @@ package com.adchain.test;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
-import java.util.HashMap;
-
 import org.junit.Test;
 
 import com.adchain.model.AdBlock;
@@ -14,49 +11,10 @@ import com.adchain.model.TransactionOutput;
 import com.adchain.model.Wallet;
 import com.adchain.test.utils.TestUtils;
 import com.adchain.utils.AdChainUtility;
+import com.adchain.utils.TransactionUtility;
 import com.adchain.utils.WalletUtility;
-import com.google.gson.GsonBuilder;
 
 public class AdChainTest {
-	public static HashMap<String, TransactionOutput> UTXOs = new HashMap<String, TransactionOutput>();
-
-	@Test
-	public void blockFunctionalityTest() {
-		System.out.println("Blocks Functionality Test:");
-
-		AdChain adChain = new AdChain();
-		AdBlock a = new AdBlock();
-		a.getTransaction().setAd(TestUtils.getImage1());
-		a.setTimeStamp(new Date().getTime());
-		a.setHash(a.calculateHash());
-		a.getTransaction().setAmount(3);
-
-		AdBlock b = new AdBlock();
-		b.getTransaction().setAd(TestUtils.getImage1());
-		b.setTimeStamp(new Date().getTime() + 500);
-		b.setHash(b.calculateHash());
-		b.getTransaction().setAmount(4);
-
-		AdBlock c = new AdBlock();
-		c.getTransaction().setAd(TestUtils.getImage1());
-		c.setTimeStamp(new Date().getTime() + 1000);
-		c.setHash(c.calculateHash());
-		c.getTransaction().setAmount(16);
-
-		adChain.add(a);
-		adChain.get(0).mineBlock(3);
-		adChain.add(b);
-		adChain.get(1).mineBlock(3);
-		adChain.add(c);
-		adChain.get(2).mineBlock(3);
-		assertTrue(AdChainUtility.validateChain(adChain));
-
-		String blockchainJson = new GsonBuilder().setPrettyPrinting().create().toJson(adChain);
-		System.out.println("\nThe block chain: ");
-		System.out.println(blockchainJson);
-		System.out.println("\n\n");
-
-	}
 
 	@Test
 	public void signatureFunctionalityTest() {
@@ -82,7 +40,49 @@ public class AdChainTest {
 	}
 
 	@Test
-	public void fullTransactionFunctionalityTest() {
-		// transactions.
+	public void fullFunctionalityTest() {
+		System.out.println("Full Functionality Test:");
+		AdChain chain = new AdChain();
+		Wallet walletA = new Wallet("a", 1);
+		Wallet walletB = new Wallet("b", 2);
+		Wallet coinFactory = new Wallet("coinFactory", 3);
+		// Creation of generation transaction
+		Transaction generationCoinsTransaction = new Transaction();
+		generationCoinsTransaction.setSender(coinFactory.getPublicKey());
+		generationCoinsTransaction.setReceiver(walletA.getPublicKey());
+		generationCoinsTransaction.setAmount(10000);
+		generationCoinsTransaction.setAd(TestUtils.getImage1());
+		generationCoinsTransaction.generateSignature(coinFactory.getPrivateKey());
+		generationCoinsTransaction.setId(1);
+
+		TransactionOutput generationUTXOs = new TransactionOutput();
+		generationUTXOs.setAmount(generationCoinsTransaction.getAmount());
+		generationUTXOs.setReceiver(generationCoinsTransaction.getReceiver());
+		generationUTXOs.setTransactionId(generationCoinsTransaction.getId());
+		generationUTXOs.setId();
+		AdChainUtility.getUTXOs().put(String.valueOf(generationUTXOs.getId()), generationUTXOs);
+		AdBlock generationBlock = new AdBlock();
+		generationBlock.getTransactions().add(generationCoinsTransaction);
+		chain.add(generationBlock);
+
+		System.out.println(walletA.getWalletBalance());
+		System.out.println(walletB.getWalletBalance());
+
+		Transaction transaction = new Transaction();
+		transaction.setTransactionInputs(walletA.getMyUTXOs());
+		transaction.setSender(walletA.getPublicKey());
+		transaction.setReceiver(walletB.getPublicKey());
+		transaction.setAmount(10);
+		transaction.setAd(TestUtils.getImage1());
+		transaction.generateSignature(walletA.getPrivateKey());
+		transaction.setId(2);
+		Transaction result = TransactionUtility.executeTransaction(transaction, AdChainUtility.getUTXOs());
+		if (result != null) {
+			AdBlock firstBlock = new AdBlock();
+			firstBlock.getTransactions().add(result);
+			chain.add(firstBlock);
+		}
+		System.out.println(walletA.getWalletBalance());
+		System.out.println(walletB.getWalletBalance());
 	}
 }

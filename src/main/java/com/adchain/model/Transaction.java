@@ -3,6 +3,8 @@ package com.adchain.model;
 import java.io.Serializable;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.adchain.utils.AdChainUtility;
 import com.adchain.utils.TransactionUtility;
@@ -19,7 +21,8 @@ public class Transaction implements Serializable {
 	private String ad;
 	private long amount;
 	private long id;
-	public byte[] signature;
+	private byte[] signature;
+	private List<TransactionInput> transactionInputs = new ArrayList<TransactionInput>();
 
 	public PublicKey getSender() {
 		return sender;
@@ -68,5 +71,29 @@ public class Transaction implements Serializable {
 		id++;
 		return AdChainUtility
 				.getSHA(WalletUtility.getStringFromKey(sender) + WalletUtility.getStringFromKey(receiver) + ad + id);
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public byte[] getSignature() {
+		return signature;
+	}
+
+	public void setSignature(byte[] signature) {
+		this.signature = signature;
+	}
+
+	public List<TransactionInput> getTransactionInputs() {
+		return transactionInputs;
+	}
+
+	public void setTransactionInputs(List<TransactionInput> transactionInputs) {
+		this.transactionInputs = transactionInputs;
 	}
 }

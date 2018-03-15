@@ -10,7 +10,7 @@ public class TransactionOutput {
 	private String id;
 	private PublicKey receiver;
 	private long amount;
-	private String transactionId;
+	private long transactionId;
 
 	public void setId() {
 		this.id = AdChainUtility.getSHA(WalletUtility.getStringFromKey(receiver) + amount + transactionId);
@@ -40,11 +40,11 @@ public class TransactionOutput {
 		this.amount = amount;
 	}
 
-	public String getTransactionId() {
+	public long getTransactionId() {
 		return transactionId;
 	}
 
-	public void setTransactionId(String transactionId) {
+	public void setTransactionId(long transactionId) {
 		this.transactionId = transactionId;
 	}
 }

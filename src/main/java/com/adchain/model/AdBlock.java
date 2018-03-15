@@ -1,18 +1,18 @@
 package com.adchain.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.adchain.utils.AdChainUtility;
 
 public class AdBlock {
 
 	private String hash;
 	private String previousHash;
-	private Transaction transaction;
+	private ArrayList<Transaction> transaction = new ArrayList<Transaction>();
 	private long timeStamp;
 	private int proofOfWorkValue;
-
-	public AdBlock() {
-		this.transaction = new Transaction();
-	}
+	private String merkleRoot;
 
 	public long getTimeStamp() {
 		return timeStamp;
@@ -27,8 +27,7 @@ public class AdBlock {
 	}
 
 	public String calculateHash() {
-		return AdChainUtility.getSHA(previousHash + this.transaction.getAmount() + Long.toString(timeStamp)
-				+ this.transaction.getAd() + proofOfWorkValue);
+		return AdChainUtility.getSHA(previousHash + Long.toString(timeStamp) + proofOfWorkValue + merkleRoot);
 	}
 
 	public void setHash(String hash) {
@@ -44,6 +43,7 @@ public class AdBlock {
 	}
 
 	public void mineBlock(int difficulty) {
+		merkleRoot = AdChainUtility.getMerkleRoot(this.getTransactions());
 		String target = new String(new char[difficulty]).replace('\0', '0');
 		while (!this.getHash().substring(0, difficulty).equals(target)) {
 			proofOfWorkValue++;
@@ -52,11 +52,11 @@ public class AdBlock {
 		System.out.println("Block Mined!!! : " + hash);
 	}
 
-	public Transaction getTransaction() {
+	public ArrayList<Transaction> getTransactions() {
 		return this.transaction;
 	}
 
-	public void setTransaction(Transaction transaction) {
+	public void setTransactions(ArrayList<Transaction> transaction) {
 		this.transaction = transaction;
 	}
 
